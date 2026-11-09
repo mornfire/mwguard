@@ -1,0 +1,15 @@
+{
+  "required": false,
+  "minVersion": "0.8",
+  "priority": 2000,
+  "package": "com.mwguard.mixin",
+  "compatibilityLevel": "JAVA_21",
+  "server": [
+    "JamedStartProcedureMixin",
+    "TargetPointerProcedureMixin",
+    "ExplosionGuardMixin"
+  ],
+  "injectors": {
+    "defaultRequire": 0
+  }
+}

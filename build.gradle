@@ -1,0 +1,69 @@
+plugins {
+    id 'java-library'
+    id 'net.neoforged.moddev' version '2.0.146'
+}
+
+version = project.mod_version
+group = project.mod_group_id
+
+base {
+    archivesName = "${mod_id}-neoforge-${minecraft_version}"
+}
+
+java {
+    toolchain {
+        languageVersion = JavaLanguageVersion.of(21)
+    }
+}
+
+repositories {
+    // Offline cache assembled from the local Gradle cache; needed because
+    // maven.neoforged.net is unreachable from this machine.
+    maven { url = uri("${rootDir}/local-repo") }
+    mavenCentral()
+}
+
+neoForge {
+    version = project.neo_version
+
+    runs {
+        server {
+            server()
+            programArgument '--nogui'
+            gameDirectory = file('run-server')
+        }
+    }
+
+    mods {
+        "${mod_id}" {
+            sourceSet(sourceSets.main)
+        }
+    }
+}
+
+dependencies {
+    // No compile-time dependency on mianbaos_modernwarfare: the mixin targets it
+    // by class name only, so it survives minor renames of unrelated classes.
+}
+
+tasks.named('processResources', ProcessResources).configure {
+    def expandProps = [
+            mod_id         : project.mod_id,
+            mod_name       : project.mod_name,
+            mod_version    : project.mod_version,
+            mod_authors    : project.mod_authors,
+            mod_description: project.mod_description,
+            loader_version_range : project.loader_version_range,
+            neo_version_range    : project.neo_version_range,
+            minecraft_version_range: project.minecraft_version_range
+    ]
+    inputs.properties(expandProps)
+    filesMatching(['META-INF/neoforge.mods.toml']) {
+        expand(expandProps)
+    }
+}
+
+tasks.withType(JavaCompile).configureEach {
+    options.encoding = 'UTF-8'
+    options.release = 21
+}

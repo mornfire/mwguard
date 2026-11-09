@@ -1,0 +1,76 @@
+#Entity lookup cache for the NewModernWarfare procedures.
+[m1_entity_cache]
+	#false = every call goes to vanilla.
+	enableEntityCache = true
+	#Ticks a cached cell is served before it expires.
+	# Default: 10
+	# Range: 1 ~ 200
+	cacheTtlTicks = 10
+	#Half-extent limit in blocks. AABB.ofSize(60,60,60) has half-extent 30.
+	#Larger queries get an empty list instead of a scan.
+	# Default: 64
+	# Range: 8 ~ 256
+	maxRadius = 64
+	#Grid edge in blocks. Query centres snap to this grid, which is the
+	#only reason a moving entity ever hits the cache.
+	# Default: 32
+	# Range: 8 ~ 128
+	cacheCellBlocks = 32
+	#Cap on cached cells. Expired entries are evicted first.
+	# Default: 4096
+	# Range: 256 ~ 65536
+	cacheMaxEntries = 4096
+	#Max entities stored per cell. The caller only asks isEmpty(), so a few is enough.
+	# Default: 8
+	# Range: 1 ~ 64
+	cacheSampleCap = 8
+	#Max cell scans per ServerTickEvent.Post.
+	# Default: 64
+	# Range: 1 ~ 1024
+	refreshBudgetPerTick = 64
+	#Route TargetpointerworkProcedure through the cache too. Off by default.
+	enableTargetPointerCache = false
+
+#Log noise.
+[m2_logging]
+	#Raise logger 'Adaptive Performance Tweaks.spawn' from DEBUG to INFO.
+	muteAptSpawnLog = true
+
+#Runtime guardrails. Default action only logs.
+[m3_guardrails]
+	#false = statistics only, no action.
+	enableGuardrails = true
+	#Sampling period in ticks. 20 = once per second.
+	# Default: 20
+	# Range: 1 ~ 200
+	guardSampleIntervalTicks = 20
+	#MSPT above this is reported.
+	# Default: 45.0
+	# Range: 1.0 ~ 1000.0
+	msptWarnThreshold = 45.0
+	#MSPT above this is critical (used by CANCEL_EXPLOSION).
+	# Default: 55.0
+	# Range: 1.0 ~ 1000.0
+	msptCriticalThreshold = 55.0
+	#Projectiles per dimension that trigger DISCARD_OLDEST_PROJECTILE.
+	# Default: 1500
+	# Range: 16 ~ 100000
+	maxProjectilesPerLevel = 1500
+	#Entities per dimension that trigger a warning.
+	# Default: 4000
+	# Range: 16 ~ 200000
+	maxEntitiesPerLevel = 4000
+	#Upper bound on what one pass may discard.
+	# Default: 50
+	# Range: 1 ~ 1000
+	maxDiscardPerPass = 50
+	#What to do when a threshold is exceeded.
+	#Allowed Values: WARN, DISCARD_OLDEST_PROJECTILE, CANCEL_EXPLOSION
+	guardrailAction = "WARN"
+
+#Diagnostics.
+[diagnostics]
+	#Permission level for /mwdiag.
+	# Default: 3
+	# Range: 0 ~ 4
+	diagPermissionLevel = 3
